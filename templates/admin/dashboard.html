@@ -1,0 +1,65 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Admin Dashboard — {{ store_name }}{% endblock %}
+
+{% block admin_content %}
+<div class="section-heading" style="text-align:left; margin-bottom:32px;">
+  <div class="eyebrow align-left">Admin</div>
+  <h2>Dashboard</h2>
+</div>
+
+<div class="stat-cards">
+  <div class="stat-card"><div class="value">{{ stats.product_count }}</div><div class="label">Products</div></div>
+  <div class="stat-card"><div class="value">{{ stats.order_count }}</div><div class="label">Orders</div></div>
+  <div class="stat-card"><div class="value">${{ '%.2f'|format(stats.revenue) }}</div><div class="label">Revenue (paid)</div></div>
+</div>
+
+<h3 style="margin-bottom:16px;">Products</h3>
+<div style="overflow-x:auto;">
+<table class="admin-table">
+  <thead>
+    <tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Tags</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for p in products %}
+    <tr>
+      <td><img src="{{ p.image_url }}" alt="{{ p.name }}"></td>
+      <td>{{ p.name }}</td>
+      <td>{{ p.category }}</td>
+      <td>${{ '%.2f'|format(p.price) }}</td>
+      <td>{{ p.stock }}</td>
+      <td>
+        {% if p.is_featured %}Featured&nbsp;{% endif %}
+        {% if p.is_new_arrival %}New&nbsp;{% endif %}
+        {% if p.is_best_seller %}Best Seller{% endif %}
+      </td>
+      <td class="table-actions">
+        <a href="{{ url_for('admin_edit_product', product_id=p.id) }}">Edit</a>
+        <form action="{{ url_for('admin_delete_product', product_id=p.id) }}" method="POST" onsubmit="return confirm('Delete this product?');">
+          <button type="submit" class="danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<h3 style="margin: 40px 0 16px;">Recent Orders</h3>
+<div style="overflow-x:auto;">
+<table class="admin-table">
+  <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+  <tbody>
+    {% for o in orders %}
+    <tr>
+      <td>#{{ o.id }}</td>
+      <td>{{ o.customer_name }}</td>
+      <td>${{ '%.2f'|format(o.total_price) }}</td>
+      <td><span class="status-badge status-{{ o.status }}">{{ o.status }}</span></td>
+      <td>{{ o.created_at }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<a href="{{ url_for('admin_orders') }}" class="btn btn-outline btn-sm" style="margin-top:20px;">View All Orders</a>
+{% endblock %}

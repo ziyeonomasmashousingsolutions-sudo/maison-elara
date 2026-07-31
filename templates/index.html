@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}{{ store_name }} — Luxury Fashion & Fine Jewellery{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero-frame">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="hero-eyebrow">Maison Elara</div>
+    <h1>Luxury Fashion &amp; Fine Jewellery</h1>
+    <p>Considered pieces, made to be worn for decades — not seasons. Discover the new collection.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('shop') }}" class="btn btn-gold">Shop The Collection</a>
+      <a href="{{ url_for('shop') }}?category=Jewellery" class="btn btn-light">Fine Jewellery</a>
+    </div>
+  </div>
+</section>
+
+{% if featured %}
+<section>
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Featured</div>
+      <h2>This Season's Selection</h2>
+      <p>A small edit of the pieces defining the house this season.</p>
+    </div>
+    <div class="product-grid">
+      {% for product in featured %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if clothing %}
+<section class="bg-beige">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Ready-to-Wear</div>
+      <h2>The Clothing Collection</h2>
+      <p>Tailored silhouettes in fine wool, silk, and cashmere.</p>
+    </div>
+    <div class="product-grid">
+      {% for product in clothing %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+    <div style="text-align:center; margin-top:48px;">
+      <a href="{{ url_for('shop') }}?category=Clothing" class="btn btn-outline">View All Clothing</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if jewellery %}
+<section>
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Fine Jewellery</div>
+      <h2>The Jewellery Collection</h2>
+      <p>18k gold vermeil and freshwater pearl, hand-finished in small runs.</p>
+    </div>
+    <div class="product-grid">
+      {% for product in jewellery %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+    <div style="text-align:center; margin-top:48px;">
+      <a href="{{ url_for('shop') }}?category=Jewellery" class="btn btn-outline">View All Jewellery</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if new_arrivals %}
+<section class="bg-beige">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Just In</div>
+      <h2>New Arrivals</h2>
+    </div>
+    <div class="product-grid">
+      {% for product in new_arrivals %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if best_sellers %}
+<section>
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Client Favorites</div>
+      <h2>Best Sellers</h2>
+    </div>
+    <div class="product-grid">
+      {% for product in best_sellers %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="bg-ink" id="story">
+  <div class="container">
+    <div class="story">
+      <div class="story-media">
+        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=900&q=80" alt="Maison Elara atelier">
+        <span class="corner tl"></span>
+        <span class="corner br"></span>
+      </div>
+      <div>
+        <div class="eyebrow align-left">Our Story</div>
+        <h2>Founded on Restraint</h2>
+        <p>Maison Elara began with a simple belief: that true luxury is quiet. Every garment and every piece of jewellery is designed to outlast trend cycles, made in small runs by artisans who take the time craftsmanship deserves.</p>
+        <p>From our Paris atelier, we source fine wool, silk, and 18k gold vermeil, working with the same small family workshops season after season.</p>
+        <a href="{{ url_for('shop') }}" class="btn btn-light">Discover the Collection</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if reviews %}
+<section id="reviews">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">In Their Words</div>
+      <h2>Customer Reviews</h2>
+    </div>
+    <div class="reviews-grid">
+      {% for review in reviews %}
+      <div class="review-card">
+        <div class="review-stars">{{ '★' * review.rating }}{{ '☆' * (5 - review.rating) }}</div>
+        <p class="review-message">"{{ review.message }}"</p>
+        <div class="review-name">{{ review.customer_name }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="bg-ink newsletter">
+  <div class="container">
+    <div class="eyebrow">Stay Connected</div>
+    <h2>Join the House of Elara</h2>
+    <p>Be first to know about new collections, private previews, and atelier stories.</p>
+    <form class="newsletter-form" action="{{ url_for('newsletter_signup') }}" method="POST">
+      <input type="email" name="email" placeholder="Your email address" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

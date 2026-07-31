@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed — {{ store_name }}{% endblock %}
+
+{% block content %}
+<section>
+  <div class="container">
+    <div class="empty-state">
+      <div class="eyebrow">{{ 'Order Confirmed' if order.status == 'paid' else 'Order Received' }}</div>
+      <h2 style="margin-bottom: 16px;">Thank you, {{ order.customer_name }}.</h2>
+      <p>Order #{{ order.id }} — status: <strong>{{ order.status | capitalize }}</strong>. A confirmation has been noted against {{ order.email }}.</p>
+
+      <div class="summary-card" style="max-width:480px; margin: 32px auto; text-align:left;">
+        {% for item in items %}
+        <div class="checkout-item-row">
+          <span>{{ item.name }} &times; {{ item.quantity }}{% if item.size %} ({{ item.size }}){% endif %}</span>
+          <span>${{ '%.2f'|format(item.price * item.quantity) }}</span>
+        </div>
+        {% endfor %}
+        <div class="summary-row summary-total"><span>Total</span><span>${{ '%.2f'|format(order.total_price) }}</span></div>
+      </div>
+
+      <a href="{{ url_for('shop') }}" class="btn btn-gold">Continue Shopping</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

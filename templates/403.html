@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Access Denied — {{ store_name }}{% endblock %}
+{% block content %}
+<div class="error-page">
+  <h1>403</h1>
+  <h3 style="margin-bottom:20px;">You don't have permission to view this page.</h3>
+  <a href="{{ url_for('home') }}" class="btn btn-gold">Return Home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Orders — {{ store_name }}{% endblock %}
+
+{% block admin_content %}
+<div class="section-heading" style="text-align:left; margin-bottom:32px;">
+  <div class="eyebrow align-left">Admin</div>
+  <h2>All Orders</h2>
+</div>
+
+{% for entry in orders %}
+<div class="admin-form" style="max-width:100%; margin-bottom:24px;">
+  <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+    <div>
+      <strong>Order #{{ entry.order.id }}</strong> &middot; {{ entry.order.customer_name }} &middot; {{ entry.order.email }}
+      <div style="font-size:0.85rem; color:var(--text-muted);">{{ entry.order.address }}, {{ entry.order.city }}, {{ entry.order.postal_code }}, {{ entry.order.country }}</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="pd-price" style="margin:0;">${{ '%.2f'|format(entry.order.total_price) }}</div>
+      <span class="status-badge status-{{ entry.order.status }}">{{ entry.order.status }}</span>
+    </div>
+  </div>
+
+  <table class="admin-table" style="margin-bottom:16px;">
+    <thead><tr><th>Item</th><th>Size</th><th>Colour</th><th>Qty</th><th>Price</th></tr></thead>
+    <tbody>
+      {% for item in entry.line_items %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.size or '—' }}</td>
+        <td>{{ item.color or '—' }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ '%.2f'|format(item.price) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <form action="{{ url_for('admin_update_order_status', order_id=entry.order.id) }}" method="POST" style="display:flex; gap:12px; align-items:center;">
+    <select name="status" style="padding:10px; border:1px solid #cfc7b4;">
+      {% for s in ['pending', 'paid', 'shipped', 'cancelled'] %}
+        <option value="{{ s }}" {{ 'selected' if entry.order.status == s }}>{{ s | capitalize }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-outline btn-sm">Update Status</button>
+  </form>
+</div>
+{% else %}
+<p>No orders yet.</p>
+{% endfor %}
+{% endblock %}

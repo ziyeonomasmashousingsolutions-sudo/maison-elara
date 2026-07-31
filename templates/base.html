@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ store_name }} — Luxury Fashion & Fine Jewellery{% endblock %}</title>
+  <meta name="description" content="{{ store_name }} — luxury fashion and fine jewellery, crafted for the quietly confident.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap" id="flash-wrap">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <header class="site-header">
+    <div class="nav-bar">
+      <a href="{{ url_for('home') }}" class="logo">MAISON <span>ELARA</span></a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' }}">Home</a></li>
+          <li><a href="{{ url_for('shop') }}?category=Clothing" class="{{ 'active' if request.endpoint == 'shop' and request.args.get('category') == 'Clothing' }}">Clothing</a></li>
+          <li><a href="{{ url_for('shop') }}?category=Jewellery" class="{{ 'active' if request.endpoint == 'shop' and request.args.get('category') == 'Jewellery' }}">Jewellery</a></li>
+          <li><a href="{{ url_for('shop') }}?category=Accessories" class="{{ 'active' if request.endpoint == 'shop' and request.args.get('category') == 'Accessories' }}">Accessories</a></li>
+          <li><a href="{{ url_for('shop') }}" class="{{ 'active' if request.endpoint == 'shop' and not request.args.get('category') }}">Shop All</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        {% if user %}
+          {% if user.is_admin %}<a href="{{ url_for('admin_dashboard') }}">Admin</a>{% endif %}
+          <a href="{{ url_for('logout') }}">Sign Out</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Sign In</a>
+        {% endif %}
+        <a href="{{ url_for('cart_view') }}" class="cart-link">
+          Bag
+          {% if cart_count > 0 %}<span class="cart-count">{{ cart_count }}</span>{% endif %}
+        </a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="{{ url_for('home') }}" class="logo">MAISON <span>ELARA</span></a>
+          <p>Luxury fashion and fine jewellery, designed in small runs for those who prefer quiet confidence over noise.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="{{ url_for('shop') }}?category=Clothing">Clothing</a></li>
+            <li><a href="{{ url_for('shop') }}?category=Jewellery">Jewellery</a></li>
+            <li><a href="{{ url_for('shop') }}?category=Accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Client Care</h4>
+          <ul>
+            <li><a href="{{ url_for('cart_view') }}">Your Bag</a></li>
+            <li><a href="{{ url_for('login') }}">Sign In</a></li>
+            <li><a href="{{ url_for('register') }}">Create Account</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>The House</h4>
+          <ul>
+            <li><a href="{{ url_for('home') }}#story">Our Story</a></li>
+            <li><a href="{{ url_for('home') }}#reviews">Reviews</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; {{ 2026 }} Maison Elara. All rights reserved.</span>
+        <span>Crafted for the quietly confident.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

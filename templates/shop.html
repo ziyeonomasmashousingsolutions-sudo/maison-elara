@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Shop — {{ store_name }}{% endblock %}
+
+{% block content %}
+<section class="section-tight">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Shop</div>
+      <h2>The Full Collection</h2>
+      <p>Clothing, fine jewellery, and accessories — each piece designed to last.</p>
+    </div>
+
+    <div class="shop-toolbar">
+      <ul class="category-filters">
+        <li><a href="{{ url_for('shop') }}" class="{{ 'active' if active_category == 'All' }}">All</a></li>
+        <li><a href="{{ url_for('shop', category='Clothing') }}" class="{{ 'active' if active_category == 'Clothing' }}">Clothing</a></li>
+        <li><a href="{{ url_for('shop', category='Jewellery') }}" class="{{ 'active' if active_category == 'Jewellery' }}">Jewellery</a></li>
+        <li><a href="{{ url_for('shop', category='Accessories') }}" class="{{ 'active' if active_category == 'Accessories' }}">Accessories</a></li>
+      </ul>
+      <form class="search-form" action="{{ url_for('shop') }}" method="GET">
+        {% if active_category and active_category != 'All' %}<input type="hidden" name="category" value="{{ active_category }}">{% endif %}
+        <input type="text" name="q" placeholder="Search products…" value="{{ search }}">
+        <button type="submit" aria-label="Search">&#8594;</button>
+      </form>
+    </div>
+
+    {% if products %}
+      <div class="product-grid">
+        {% for product in products %}{% include "_product_card.html" %}{% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h3>No pieces found</h3>
+        <p>Try a different category or search term.</p>
+        <a href="{{ url_for('shop') }}" class="btn btn-outline">View All Products</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

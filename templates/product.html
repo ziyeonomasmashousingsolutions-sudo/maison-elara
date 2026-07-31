@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — {{ store_name }}{% endblock %}
+
+{% block content %}
+<section class="section-tight">
+  <div class="container">
+    <div class="product-detail">
+      <div>
+        <div class="gallery-main">
+          <img src="{{ product.image_url }}" alt="{{ product.name }}" data-gallery-main>
+        </div>
+        {% if gallery %}
+        <div class="gallery-thumbs">
+          <img src="{{ product.image_url }}" data-gallery-thumb data-full="{{ product.image_url }}" class="active" alt="">
+          {% for img in gallery %}
+            <img src="{{ img }}" data-gallery-thumb data-full="{{ img }}" alt="">
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div>
+        <div class="pd-category">{{ product.category }}</div>
+        <h1 class="pd-name">{{ product.name }}</h1>
+        <div class="pd-price">${{ '%.2f'|format(product.price) }}</div>
+        <p class="pd-desc">{{ product.description }}</p>
+
+        <form action="{{ url_for('cart_add') }}" method="POST" id="product-form">
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+
+          {% if sizes %}
+          <div class="option-group">
+            <label class="option-label">Size</label>
+            <div class="swatches" data-swatch-group="size-input">
+              {% for size in sizes %}
+                <button type="button" class="swatch" data-value="{{ size }}">{{ size }}</button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="size" id="size-input" value="{{ sizes[0] }}">
+          </div>
+          {% endif %}
+
+          {% if colors %}
+          <div class="option-group">
+            <label class="option-label">Colour</label>
+            <div class="swatches" data-swatch-group="color-input">
+              {% for color in colors %}
+                <button type="button" class="swatch" data-value="{{ color }}">{{ color }}</button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="color" id="color-input" value="{{ colors[0] }}">
+          </div>
+          {% endif %}
+
+          <div class="option-group">
+            <label class="option-label">Quantity</label>
+            <div class="qty-selector" data-qty-stepper>
+              <button type="button" data-qty-minus aria-label="Decrease quantity">&minus;</button>
+              <input type="number" name="qty" value="1" min="1" aria-label="Quantity">
+              <button type="button" data-qty-plus aria-label="Increase quantity">&plus;</button>
+            </div>
+          </div>
+
+          <div class="pd-actions">
+            <button type="submit" class="btn btn-outline btn-block" {{ 'disabled' if product.stock <= 0 }}>
+              {{ 'Sold Out' if product.stock <= 0 else 'Add to Bag' }}
+            </button>
+            <button type="submit" name="buy_now" value="1" class="btn btn-gold btn-block" {{ 'disabled' if product.stock <= 0 }}>
+              Buy Now
+            </button>
+          </div>
+        </form>
+
+        <p class="stock-note">
+          {% if product.stock > 0 %}In stock — {{ product.stock }} available{% else %}Currently unavailable{% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if related %}
+<section class="bg-beige">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">You May Also Like</div>
+      <h2>More From {{ product.category }}</h2>
+    </div>
+    <div class="product-grid">
+      {% for product in related %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-shell">
+  <aside class="admin-nav">
+    <a href="{{ url_for('admin_dashboard') }}" class="logo">MAISON <span>ELARA</span></a>
+    <ul>
+      <li><a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.endpoint == 'admin_dashboard' }}">Dashboard</a></li>
+      <li><a href="{{ url_for('admin_add_product') }}" class="{{ 'active' if request.endpoint == 'admin_add_product' }}">Add Product</a></li>
+      <li><a href="{{ url_for('admin_orders') }}" class="{{ 'active' if request.endpoint == 'admin_orders' }}">Orders</a></li>
+      <li><a href="{{ url_for('home') }}">View Store</a></li>
+    </ul>
+  </aside>
+  <div class="admin-main">
+    {% block admin_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
