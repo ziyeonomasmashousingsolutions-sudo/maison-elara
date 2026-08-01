@@ -18,8 +18,8 @@ class Config:
     DATABASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "maison_elara.db")
 
     # Stripe
-    STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
-    STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
+    STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "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")
+    STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "pk_live_51TdUEOLQYzUzOec4M88iOb5PxB0Wi0YMzuERtTLrtBp2mQI8oPccjKXLgaC5z45R6r7f6X7PlRrL6wXgoF0mgv3A00ZhnWwqUq")
     CURRENCY = os.environ.get("CURRENCY", "usd")
 
     # Cloudinary
